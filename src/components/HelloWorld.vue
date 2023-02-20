@@ -2,8 +2,10 @@
   <div class="hello">
     <div id="gundong" @scroll="scroll($event)" class="messageBox">
       <li :key="index" v-for="(item, index) in messagelist">
+        <p>{{ ForTime(item,index) }}</p>
         <span v-if="item.loading">上传中</span>
-        消息{{ index }}
+        消息:{{ item.content }}
+      
       </li>
     </div>
     <input type="file" name="image" accept="image/*" @change="upload($event)">
@@ -12,15 +14,18 @@
 </template>
 
 <script>
+import {messageData,newMessage} from './data'
+import {checkShowRule } from './js'
 export default {
   name: 'HelloWorld',
   data() {
     return {
-      messagelist: Array(20).fill('1'),
+      messagelist: messageData,
       lastScrollHeight: 0
     }
   },
   mounted() {
+    
     this.$nextTick(() => {
       let msg = document.getElementById('gundong') // 获取对象
       this.lastScrollHeight = msg.scrollHeight
@@ -79,6 +84,17 @@ export default {
 
 
       }
+    },
+    ForTime(item,index){
+      console.log(checkShowRule(item,this.messagelist,'sendTime',index));
+     return  checkShowRule(item,this.messagelist,'sendTime',index)
+      // if(index!==0){
+      //   const thisTime=new Date(item.sendTime);
+      //   const lastTime=new Date(this.messagelist[index-1].sendTime);
+      //   // console.log(thisTime-lastTime);
+      // }else{
+      //   return item.sendTime
+      // }
     }
   }
 }
